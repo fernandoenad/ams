@@ -216,12 +216,12 @@ class EventController extends Controller
             $fpdf->Cell(195, 5, 'SCHOOLS DIVISION OFFICE - BOHOL', 'LR', 1, 'C');
             $fpdf->SetFont('Courier', '', 10);
             $fpdf->Cell(195, 3, 'Tagbilaran City', 'LR', 1, 'C');
-            $fpdf->Cell(195, 8, '', 'LR', 1, 'C');
+            $fpdf->Cell(195, 4, '', 'LR', 1, 'C');
             $fpdf->SetFont('Courier', 'B', 20);
-            $fpdf->Cell(195, 5, 'CERTIFICATE OF APPEARANCE', 'LR', 1, 'C');
+            $fpdf->Cell(195, 4, 'CERTIFICATE OF APPEARANCE', 'LR', 1, 'C');
             $fpdf->SetFont('Courier', '', 8);
             $fpdf->SetFont('Courier', 'B', 20);
-            $fpdf->Cell(195, 5, '', 'LR', 1, 'C');
+            $fpdf->Cell(195, 4, '', 'LR', 1, 'C');
             $fpdf->SetFont('Courier', '', 10);
             
             $registration_name = mb_strtoupper($registration->getFullname());
@@ -233,6 +233,7 @@ class EventController extends Controller
             $text1 = 'This is to certify that ';
             $text2 = $registration_name . ' of ' . $office_name;
             $text3 = 'has attended the recently concluded';
+            
             $text4 = $event;
             $text5 = 'held on ' . $from_date . '-' . $to_date;
             $text6 = ' at ' . $venue . '.';
@@ -243,19 +244,35 @@ class EventController extends Controller
             $fpdf->Cell(195, 6, $text2, 'LR', 1, 'C');
             $fpdf->SetFont('Courier', '', 10);
             $fpdf->Cell(195, 4, $text3, 'LR', 1, 'C');
-            $fpdf->SetFont('Courier', 'B', 10);
-            $fpdf->Cell(195, 4, $text4, 'LR', 1, 'C');
+            $fpdf->SetFont('Courier', 'B', 11);
+            
+            $text = $registration->event->name;
+            $char_per_line = 80; 
+            $text_arr = explode("\n", wordwrap($text, $char_per_line));
+            $max_lines = 3;
+            $line_count = 0;
+
+            for($i=0; $i<sizeof($text_arr); $i++){
+                $fpdf->Cell(195, 5, $text_arr[$i], 'LR', 1, 'C');
+                $line_count++;
+            } 
+
+            for($i=$line_count; $i<$max_lines; $i++){
+                $fpdf->Cell(195, 5, '', 'LR', 1, 'C');
+            }
+
+            //$fpdf->Cell(195, 4, $text4, 'LR', 1, 'C');
             $fpdf->SetFont('Courier', '', 10);
             $fpdf->Cell(195, 4, $text5, 'LR', 1, 'C');
             $fpdf->Cell(195, 4, $text6, 'LR', 1, 'C');
             $fpdf->Cell(195, 4, '', 'LR', 1, 'C');
             $fpdf->Cell(195, 4, $text7, 'LR', 1, 'C');
-            $fpdf->Cell(195, 15, '', 'LR', 1, 'C');
+            $fpdf->Cell(195, 10, '', 'LR', 1, 'C');
 
             $image_width = 30;
             $fpdf->Image('storage/assets/sds.png',(200/2) - ($image_width/2)+7,106,$image_width);
             $fpdf->SetFont('Courier', 'B', 12);
-            $fpdf->Cell(195, 5, 'BIANITO A. DAGATAN, PhD, CESO V', 'LR', 1, 'C');
+            $fpdf->Cell(195, 5, 'BIANITO A. DAGATAN, EdD, CESO V', 'LR', 1, 'C');
             $fpdf->SetFont('Courier', '', 10);
             $fpdf->Cell(195, 5, 'Schools Division Superintendent', 'LR', 1, 'C');
             $fpdf->SetFont('Courier', '', 6);
